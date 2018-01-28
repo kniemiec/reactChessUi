@@ -18,6 +18,23 @@ class BoardRepresentation {
 	BQ = 11;
 	BK = 12;
 
+
+	ICONS = [
+	              '',
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wp.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wn.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wb.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wr.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wq.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/wk.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/bp.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/bn.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/bb.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/br.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/bq.png"  }),
+	              jQuery('<img/>', { src: "/css/icons/chess-icons/bk.png"  })
+	              ];	
+
 	INITIAL_BOARD = [
 		                   [ BR, BN, BB, BQ, BK,  BB, BN, ],
 		                   [ BP, BP,BP,BP,BP,BP,BP,BP],
@@ -41,6 +58,11 @@ class BoardRepresentation {
 		return INITIAL_BOARD[line][field];
 	}
 
+	getFieldFigure(line : number, field : number){
+		var fieldValue = INITIAL_BOARD[line][field];
+		return ICONS[fieldValue];
+	}
+
 }
 
 class Square extends React.Component {
@@ -54,12 +76,21 @@ class Square extends React.Component {
   	}
   }
 
+  calculateSquareClass(fieldNumber){
+  	var columnNumber = fieldNumber % 8;
+  	var lineNumber = (fieldNumber-columnNumber) / 8;
+  	return { line: lineNumber,column : columnNumber}
+  }
+
   render() {
   	var squareClass = this.calculateSquareClass(this.props.value);
+  	var squareCoordinates = this.calculateSquareCoordinates(this.props.value):
+   	var boardRepresentation = this.props.boardRepresentation;
 
+   	var fieldIcon = boardRepresentation.getFieldFigure(squareCoordinates.line, squareCoordinates.column);
     return (
       <td className={squareClass}>
-        <img src={ require('./icons/chess-icons/bb.png') } />
+        <img src={ require(fieldIcon) } />
       </td>
     );
   }
@@ -69,8 +100,9 @@ class BoardLine extends React.Component {
 	render(){
 		var fields = [];
 		var startField = this.props.startField;
+		var boardRepresentation = this.props.boardRepresentation;
 		for(var i = 0;i<8;i++){
-			fields.push(<Square value={startField + i}/>);
+			fields.push(<Square value={startField + i} boardRepresentation={boardRepresentation}/>);
 		}
 		return(
 			<tr>
@@ -82,9 +114,10 @@ class BoardLine extends React.Component {
 
 class Board extends React.Component {
   render() {
+  	var lines = [];
   	var boardRep = this.props.boardRepresentation;
   	for(var i = 0;i<boardRep.getBoard().length;i++){
-  		lines.push(<BoardLine startField={i*8} boardLine={boardRep.getLine(i)}/>);
+  		lines.push(<BoardLine startField={i*8} boardRepresentation={boardRep}/>);
   	}
     return <table>{lines}</table>;
   }
