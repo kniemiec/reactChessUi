@@ -4,7 +4,7 @@ import './index.css';
 
 class BoardRepresentation {
 
-	WP = 1;
+	WP  = 1;
 	WN = 2;
 	WB = 3;
 	WR = 4;
@@ -20,47 +20,47 @@ class BoardRepresentation {
 
 
 	ICONS = [
-	              '',
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wp.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wn.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wb.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wr.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wq.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/wk.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/bp.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/bn.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/bb.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/br.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/bq.png"  }),
-	              jQuery('<img/>', { src: "/css/icons/chess-icons/bk.png"  })
+	              './icons/chess-icons/wp.png',
+	              './icons/chess-icons/wp.png' , 
+	              './icons/chess-icons/wn.png' ,
+	              './icons/chess-icons/wb.png' ,
+	              './icons/chess-icons/wr.png' ,
+	              './icons/chess-icons/wq.png' ,
+	              './icons/chess-icons/wk.png' ,
+	              './icons/chess-icons/bp.png' ,
+	              './icons/chess-icons/bn.png' ,
+	              './icons/chess-icons/bb.png' ,
+	              './icons/chess-icons/br.png' ,
+	              './icons/chess-icons/bq.png' ,
+	              './icons/chess-icons/bk.png' 
 	              ];	
 
 	INITIAL_BOARD = [
-		                   [ BR, BN, BB, BQ, BK,  BB, BN, ],
-		                   [ BP, BP,BP,BP,BP,BP,BP,BP],
+		                   [ this.BR, this.BN, this.BB, this.BQ, this.BK,  this.BB, this.BN, this.BR],
+		                   [ this.BP, this.BP,this.BP,this.BP,this.BP,this.BP,this.BP,this.BP],
 		                   [0,0,0,0,0,0,0,0],
 		                   [0,0,0,0,0,0,0,0],
 		                   [0,0,0,0,0,0,0,0],
 		                   [0,0,0,0,0,0,0,0],
-		                   [ WP, WP,WP,WP,WP,WP,WP,WP],
-		                   [ WR, WN, WB, WQ, WK,  WB, WN, WR],
+		                   [ this.WP, this.WP,this.WP,this.WP,this.WP,this.WP,this.WP,this.WP],
+		                   [ this.WR, this.WN, this.WB, this.WQ, this.WK,  this.WB, this.WN, this.WR],
 		                  ];
 
 	getBoard(){
-		return INITIAL_BOARD;
+		return this.INITIAL_BOARD;
 	}		                  
 
 	getLine(line : number){
-		return INITIAL_BOARD[line];
+		return this.INITIAL_BOARD[line];
 	}
 
 	getField(line : number, field : number){
-		return INITIAL_BOARD[line][field];
+		return this.INITIAL_BOARD[line][field];
 	}
 
 	getFieldFigure(line : number, field : number){
-		var fieldValue = INITIAL_BOARD[line][field];
-		return ICONS[fieldValue];
+		var fieldValue = this.INITIAL_BOARD[line][field];
+		return this.ICONS[fieldValue];
 	}
 
 }
@@ -76,7 +76,7 @@ class Square extends React.Component {
   	}
   }
 
-  calculateSquareClass(fieldNumber){
+  calculateSquareCoordinates(fieldNumber){
   	var columnNumber = fieldNumber % 8;
   	var lineNumber = (fieldNumber-columnNumber) / 8;
   	return { line: lineNumber,column : columnNumber}
@@ -84,13 +84,13 @@ class Square extends React.Component {
 
   render() {
   	var squareClass = this.calculateSquareClass(this.props.value);
-  	var squareCoordinates = this.calculateSquareCoordinates(this.props.value):
+  	var squareCoordinates = this.calculateSquareCoordinates(this.props.value);
    	var boardRepresentation = this.props.boardRepresentation;
 
-   	var fieldIcon = boardRepresentation.getFieldFigure(squareCoordinates.line, squareCoordinates.column);
+   	var fieldIcon = require(boardRepresentation.getFieldFigure(squareCoordinates.line, squareCoordinates.column));
     return (
       <td className={squareClass}>
-        <img src={ require(fieldIcon) } />
+        <img src={fieldIcon} />
       </td>
     );
   }
